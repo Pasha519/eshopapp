@@ -1,0 +1,54 @@
+{% extends 'testapp/base.html' %}
+{% load cust_filters %}
+{% block body %}
+
+<div class="container-fluid mt-3">
+	<div class="row">
+
+
+		<!-- filter -->
+
+		<div class="col-lg-3 mx-auto">
+			<div class="list-group">
+
+				<a href="/home" class="list-group-item list-group-item-action btn btn-outline-success">All Products</a>
+
+				{% for category in categories %}
+				<a href="/{{category.id}}"
+					class="list-group-item list-group-item-action btn btn-outline-success ">{{category.name}}</a>
+				{% endfor %}
+			</div>
+		</div>
+
+		<!-- all products -->
+		<div id='products' class="col-lg-9 mx-auto">
+			<div class="row mx-auto">
+				{% for product in products %}
+				<div class="card mx-auto mb-3" id={{product.id}} style="width: 18rem;height:30rem">
+					<img class="card-img-top" src="{{product.image.url}}" alt="Card image cap">
+					<div class="card-body">
+						<p class="card-title">{{product.name|title}}</p>
+						<p class="card-text"><b>{{product.price|currency}}</b></p>
+					</div>
+
+						<!--item add or remove button-->
+					<div class="card-footer p-0 no-gutters">
+						{% if product %}
+						<div class="row no-gutters">
+						<form action="" method="POST" class="btn-block">
+							{% csrf_token %}
+							<input hidden type="text" name='product' value='{{product.id}}'>
+							<!--<input type="submit" class="float-right btn btn-success form-control" value="Buy">-->
+							<a href="/order/{{product.id}}" class="float-right btn btn-success form-control">Buy</a>
+						</form>
+						</div>
+						{% endif %}
+					</div>
+
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
